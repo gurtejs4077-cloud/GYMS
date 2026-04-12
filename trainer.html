@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GymFlow | Tactical Commands</title>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/firebase-config.js"></script>
+    <style>
+        :root {
+            --acc-teal: #00ffcc;
+            --acc-blue: #0088ff;
+            --glass-bg: rgba(5, 10, 15, 0.8);
+            --glass-border: rgba(0, 255, 204, 0.1);
+        }
+
+        body { background: #000; overflow: hidden; }
+
+        .phone {
+            border: 1px solid rgba(0, 255, 204, 0.1);
+            background: linear-gradient(135deg, #020508 0%, #080c14 50%, #020508 100%);
+            box-shadow: 0 0 100px rgba(0, 255, 204, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 100% 0%, rgba(0, 255, 204, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 0% 100%, rgba(0, 136, 255, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .screen { padding: 0; position: relative; z-index: 2; overflow-y: auto; height: 100%; }
+
+        .staff-label { 
+            font-size: 10px; font-weight: 800; color: var(--acc-teal); 
+            background: rgba(0, 255, 204, 0.1); padding: 4px 12px; 
+            border-radius: 100px; display: inline-block; margin-bottom: 8px;
+            letter-spacing: 1.5px; border: 1px solid rgba(0, 255, 204, 0.2);
+        }
+
+        .s-header { padding: 32px 24px 20px; }
+        .s-name { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; color: #fff; }
+
+        .hero-card {
+            background: linear-gradient(135deg, rgba(0, 255, 204, 0.05), rgba(0, 136, 255, 0.05));
+            border: 1px solid var(--acc-teal);
+            margin: 0 16px; padding: 24px; border-radius: 28px;
+            box-shadow: 0 0 30px rgba(0, 255, 204, 0.1);
+        }
+
+        .hero-plan { font-size: 10px; font-weight: 800; color: var(--acc-teal); letter-spacing: 2px; }
+        .hero-title { font-size: 14px; color: var(--t-secondary); margin: 8px 0 16px; }
+
+        .btn-teal {
+            background: var(--acc-teal); color: #000; border: none;
+            padding: 12px; border-radius: 14px; font-weight: 800; font-size: 12px;
+            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.3);
+            cursor: pointer; transition: 0.3s;
+        }
+        .btn-teal:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 255, 204, 0.5); }
+
+        .roster-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            margin: 20px 16px;
+            padding: 20px;
+        }
+
+        .m-item {
+            display: flex; align-items: center; gap: 12px; 
+            padding: 12px; border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .m-item:last-child { border-bottom: none; }
+
+        .m-av {
+            width: 40px; height: 40px; border-radius: 12px;
+            background: rgba(255,255,255,0.05);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 12px; font-weight: 800; color: var(--acc-teal);
+            border: 1px solid rgba(0, 255, 204, 0.1);
+        }
+
+        .btn-log {
+            background: rgba(0, 255, 204, 0.1); border: 1px solid rgba(0, 255, 204, 0.3);
+            color: var(--acc-teal); padding: 6px 12px; border-radius: 8px;
+            font-size: 10px; font-weight: 800; cursor: pointer; transition: 0.2s;
+        }
+        .btn-log:hover { background: var(--acc-teal); color: #000; }
+
+        .bottom-nav { background: rgba(5, 10, 15, 0.9); border-top: 1px solid var(--glass-border); border-radius: 32px 32px 0 0; }
+        
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .animate { animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="phone">
+            
+            <div class="phone-notch">
+                <span class="notch-time" id="clock">9:41</span>
+                <div class="notch-icons">
+                    <div style="background: var(--acc-teal); width: 6px; height: 6px; border-radius: 50%; box-shadow: 0 0 10px var(--acc-teal);"></div>
+                </div>
+            </div>
+
+            <div class="screen">
+                <div class="s-header animate" style="animation-delay: 0.1s">
+                    <div class="staff-label">STAFF_COMMAND v2.0</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="s-name" id="trainerName">Coach...</div>
+                        <div id="trainerInitials" style="width: 44px; height: 44px; border-radius: 14px; background: var(--acc-teal); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 900; box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);">--</div>
+                    </div>
+                </div>
+
+                <div class="hero-card animate" style="animation-delay: 0.2s">
+                    <div class="hero-plan" id="gymName">NEBULA GYM FACILITY</div>
+                    <div class="hero-title">Next Assigned Session</div>
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div>
+                            <div id="nextSessionTime" style="font-size: 28px; font-weight: 800; color: #fff;">11:30 AM</div>
+                            <div id="nextSessionDesc" style="color: var(--acc-teal); font-size: 12px; font-weight: 700; opacity: 0.8;">Syncing schedule...</div>
+                        </div>
+                        <button class="btn-teal">START_OPS</button>
+                    </div>
+                </div>
+
+                <div class="roster-card animate" style="animation-delay: 0.3s">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <div id="rosterTitle" style="font-size: 11px; font-weight: 800; color: var(--t-tertiary); letter-spacing: 2px;">MEMBER_ROSTER (0)</div>
+                        <div style="font-size: 10px; color: var(--acc-teal); font-weight: 800;">LIVE</div>
+                    </div>
+                    <div id="memberList" style="display: flex; flex-direction: column;">
+                        <div style="color: var(--t-tertiary); font-size: 12px; text-align: center; padding: 20px;">Establishing link to fleet...</div>
+                    </div>
+                </div>
+
+                <div style="height: 100px;"></div>
+            </div>
+
+            <div class="bottom-nav">
+                <div class="bn-item on">
+                    <div class="bn-icon" style="width: 24px; height: 4px; border-radius: 2px; margin: 0 auto 4px; background: var(--acc-teal);"></div>
+                    <div class="bn-lbl" style="font-size: 10px; font-weight: 800; color: var(--acc-teal);">Duty</div>
+                </div>
+                <div class="bn-item">
+                    <div class="bn-lbl" style="font-size: 10px; font-weight: 800; color: var(--t-secondary);">Telemetry</div>
+                </div>
+                <div class="bn-item" onclick="logout()">
+                    <div class="bn-lbl" style="font-size: 10px; font-weight: 800; color: #ff3e3e;">Abort</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.getHours() + ":" + String(now.getMinutes()).padStart(2, '0');
+        }, 1000);
+
+        const userId = localStorage.getItem('user_id');
+        const gymId = localStorage.getItem('gym_id');
+
+        if (!userId) window.location.href = 'index.html';
+
+        db.collection('trainers').doc(userId).onSnapshot(doc => {
+            if (doc.exists) {
+                const data = doc.data();
+                document.getElementById('trainerName').textContent = "Coach " + data.name.split(' ')[0];
+                document.getElementById('trainerInitials').textContent = (data.initials || data.name.substring(0,2)).toUpperCase();
+                document.getElementById('nextSessionDesc').textContent = `${(data.specialty || 'General').toUpperCase()} SECTOR · Studio B`;
+            }
+        });
+
+        db.collection('gyms').doc(gymId).get().then(doc => {
+            if (doc.exists) {
+                document.getElementById('gymName').textContent = doc.data().name.toUpperCase() + " FACILITY";
+            }
+        });
+
+        db.collection('members').where('gym_id', '==', gymId).orderBy('name', 'asc')
+            .onSnapshot(snap => {
+                const list = document.getElementById('memberList');
+                list.innerHTML = "";
+                document.getElementById('rosterTitle').textContent = `MEMBER_ROSTER (${snap.size})`;
+                
+                snap.forEach(doc => {
+                    const m = doc.data();
+                    const item = document.createElement('div');
+                    item.className = 'm-item';
+                    item.innerHTML = `
+                        <div class="m-av">${m.name.substring(0,2)}</div>
+                        <div style="flex: 1;">
+                            <div style="font-size: 14px; font-weight: 700; color: #fff;">${m.name}</div>
+                            <div style="font-size: 10px; color: var(--t-tertiary); font-weight: 700;">${m.plan.toUpperCase()} FLEET</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 12px; font-weight: 800; color: var(--acc-teal);">${m.attendance || 0} OPS</div>
+                            <button class="btn-log" onclick="logAttendance('${doc.id}', ${m.attendance || 0})">LOG_OP</button>
+                        </div>
+                    `;
+                    list.appendChild(item);
+                });
+            });
+
+        async function logAttendance(id, current) {
+            try { await db.collection('members').doc(id).update({ attendance: current + 1 }); }
+            catch (e) { alert("Data link failure."); }
+        }
+
+        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+    </script>
+</body>
+</html>

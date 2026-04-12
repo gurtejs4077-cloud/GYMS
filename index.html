@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GymFlow | Neural Gateway</title>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/firebase-config.js"></script>
+    <style>
+        :root {
+            --acc-neon: #00f2ff;
+        }
+
+        body { background: #000; overflow: hidden; }
+
+        .phone {
+            border: 1px solid rgba(255,255,255,0.1);
+            background: linear-gradient(135deg, #050507 0%, #0a0a12 50%, #050507 100%);
+            box-shadow: 0 0 100px rgba(0, 242, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .phone::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 50% 0%, rgba(0, 242, 255, 0.1) 0%, transparent 60%),
+                radial-gradient(circle at 50% 100%, rgba(255, 0, 255, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .screen {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .portal-icon {
+            width: 80px; height: 80px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--acc-neon);
+            border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 32px; margin: 0 auto 32px;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.2);
+            animation: iconFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .portal-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 32px; font-weight: 800;
+            color: #fff; text-align: center;
+            text-transform: uppercase; letter-spacing: 2px;
+        }
+
+        .portal-desc {
+            font-size: 11px; font-weight: 700; color: var(--t-tertiary);
+            text-align: center; margin: 12px 0 48px;
+            letter-spacing: 1.5px; text-transform: uppercase;
+        }
+
+        .portal-input {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 24px;
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--acc-neon);
+            letter-spacing: 12px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .portal-input:focus {
+            background: rgba(255,255,255,0.05);
+            border-color: var(--acc-neon);
+            box-shadow: 0 0 40px rgba(0, 242, 255, 0.1);
+            outline: none;
+        }
+
+        #submitBtn {
+            background: var(--acc-neon);
+            color: #000;
+            font-family: 'Syne', sans-serif;
+            font-weight: 800;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 20px;
+            border-radius: 24px;
+            margin-top: 24px;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+            box-shadow: 0 10px 30px rgba(0, 242, 255, 0.3);
+        }
+
+        #submitBtn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(0, 242, 255, 0.5);
+        }
+
+        #errorBox {
+            background: rgba(255, 62, 62, 0.1);
+            color: #ff6b6b;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 800;
+            margin-top: 16px;
+            text-align: center;
+            border: 1px solid rgba(255, 62, 62, 0.2);
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-container">
+        <div class="phone">
+            
+            <div class="phone-notch">
+                <span class="notch-time" id="clock">9:41</span>
+                <div class="notch-icons">
+                    <div style="background: var(--acc-neon); width: 6px; height: 6px; border-radius: 50%; box-shadow: 0 0 10px var(--acc-neon);"></div>
+                </div>
+            </div>
+
+            <div class="screen">
+                <div class="portal-icon">⚡</div>
+                <h2 class="portal-title">GymFlow</h2>
+                <p class="portal-desc">Establishing Biometric Bridge</p>
+
+                <form id="portalForm" class="portal-form" style="display: flex; flex-direction: column;">
+                    <input 
+                        name="code"
+                        type="text" 
+                        maxlength="4" 
+                        placeholder="••••" 
+                        class="portal-input"
+                        id="codeField"
+                        required
+                        autocomplete="off"
+                    >
+                    <div id="errorBox" style="display: none;">ACCESS_DENIED</div>
+                    
+                    <button type="submit" id="submitBtn">
+                        Establish Link
+                    </button>
+                </form>
+
+                <div style="text-align: center; font-size: 9px; color: var(--t-tertiary); font-weight: 800; letter-spacing: 2px; margin-top: 48px; opacity: 0.5;">
+                    CYBERNETIC_INTERFACE v2.0
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.getHours() + ":" + String(now.getMinutes()).padStart(2, '0');
+        }, 1000);
+
+        const portalForm = document.getElementById('portalForm');
+        const codeField = document.getElementById('codeField');
+        const errorBox = document.getElementById('errorBox');
+        const submitBtn = document.getElementById('submitBtn');
+
+        portalForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const code = codeField.value;
+            errorBox.style.display = 'none';
+            submitBtn.disabled = true;
+            submitBtn.textContent = "SYNCHRONIZING...";
+
+            try {
+                // Check Members
+                const memberSnap = await db.collection('members').where('access_code', '==', code).get();
+                if (!memberSnap.empty) {
+                    const memberData = memberSnap.docs[0].data();
+                    localStorage.setItem('user_id', memberSnap.docs[0].id);
+                    localStorage.setItem('gym_id', memberData.gym_id);
+                    window.location.href = 'member.html';
+                    return;
+                }
+
+                // Check Trainers
+                const trainerSnap = await db.collection('trainers').where('access_code', '==', code).get();
+                if (!trainerSnap.empty) {
+                    const trainerData = trainerSnap.docs[0].data();
+                    localStorage.setItem('user_id', trainerSnap.docs[0].id);
+                    localStorage.setItem('gym_id', trainerData.gym_id);
+                    window.location.href = 'trainer.html';
+                    return;
+                }
+
+                errorBox.textContent = "CLEARANCE_DENIED";
+                errorBox.style.display = 'block';
+            } catch (err) {
+                errorBox.textContent = "LINK_FAILURE";
+                errorBox.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = "Establish Link";
+            }
+        };
+
+        codeField.oninput = function() { this.value = this.value.replace(/\D/g,''); };
+    </script>
+</body>
+</html>

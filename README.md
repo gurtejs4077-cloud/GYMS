@@ -23,8 +23,10 @@ The project is pre-configured with **Capacitor**. The Android native source is l
 - **Java Requirements**: OpenJDK 17
 
 ## 📂 Project Structure
-- `/php_app`: The self-contained production-ready SaaS for shared hosting.
-- `/src`: The Next.js prototype and development environment.
+- `index.html`: Main entry point (Firebase Web Version).
+- `/js`, `/css`, `/assets`: Core frontend logic and styling.
+- `/nextjs_prototype`: The original Next.js prototype.
+- `/php_app`: The self-contained PHP version for shared hosting.
 - `/android`: Native Android project files.
 
 ---

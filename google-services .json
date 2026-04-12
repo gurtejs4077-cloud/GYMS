@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "606905628730",
+    "project_id": "gymflow-83d53",
+    "storage_bucket": "gymflow-83d53.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:606905628730:android:1fb1e527fc1263160f5d03",
+        "android_client_info": {
+          "package_name": "com.nexlify.GymFlow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDn6nyTgVyM9IL2apEsGd2VRfMSWZCliSg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
