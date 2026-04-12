@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GymFlow | Cloud Setup</title>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/firebase-config.js"></script>
+</head>
+<body style="background: #111; color: #fff; padding: 40px; font-family: sans-serif;">
+    <h1>GymFlow Firebase Seeder</h1>
+    <p>Use this tool to initialize your Firestore database with demo data.</p>
+    <hr>
+    <button id="seedBtn" style="padding: 15px 30px; background: #00ffcc; color: #000; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+        Provision Cloud Data
+    </button>
+    <div id="log" style="margin-top: 20px; font-family: monospace; background: #000; padding: 20px; border-radius: 8px; min-height: 200px; white-space: pre-wrap;"></div>
+
+    <script>
+        const log = document.getElementById('log');
+        const btn = document.getElementById('seedBtn');
+
+        function print(msg) {
+            log.textContent += msg + "\n";
+        }
+
+        btn.onclick = async () => {
+            btn.disabled = true;
+            print("🚀 Starting Provisioning...");
+
+            try {
+                // 1. Create Gym
+                const gymRef = db.collection('gyms').doc('demo-gym-1');
+                await gymRef.set({
+                    name: "Nebula Fitness",
+                    location: "Orbit Sector 7",
+                    created_at: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                print("✅ Gym 'Nebula Fitness' created.");
+
+                // 2. Create Trainer
+                const trainerRef = db.collection('trainers').doc('trainer-1');
+                await trainerRef.set({
+                    name: "Jax Teller",
+                    initials: "JT",
+                    access_code: "9999",
+                    gym_id: "demo-gym-1",
+                    specialty: "Cyber-Strength"
+                });
+                print("✅ Trainer 'Jax Teller' created (Code: 9999).");
+
+                // 3. Create Member
+                const memberRef = db.collection('members').doc('member-1');
+                await memberRef.set({
+                    name: "Sarah Connor",
+                    access_code: "1111",
+                    gym_id: "demo-gym-1",
+                    plan: "Elite",
+                    attendance: 12,
+                    goal_progress: 78
+                });
+                print("✅ Member 'Sarah Connor' created (Code: 1111).");
+
+                // 4. Create Classes
+                const b = db.batch();
+                const classes = [
+                    { name: "Power Grid", trainer_name: "Jax Teller", time: "10:30 AM", gym_id: "demo-gym-1" },
+                    { name: "Neon Yoga", trainer_name: "S. Vane", time: "12:00 PM", gym_id: "demo-gym-1" },
+                    { name: "Core Drift", trainer_name: "Jax Teller", time: "05:15 PM", gym_id: "demo-gym-1" }
+                ];
+
+                classes.forEach(c => {
+                    const ref = db.collection('classes').doc();
+                    b.set(ref, c);
+                });
+                await b.commit();
+                print("✅ Initial Class Schedule populated.");
+
+                print("\n✨ PROVISION_COMPLETE\nYou can now log in at index.html with code 1111 or 9999.");
+            } catch (err) {
+                print("\n❌ ERROR: " + err.message);
+                console.error(err);
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GymFlow Admin | Real-time HUD</title>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/firebase-config.js"></script>
+</head>
+<body style="background: var(--g-dark);">
+    <div class="mesh-bg"></div>
+    <div class="shell-wrapper">
+        <div class="shell">
+            <div class="topbar">
+                <div class="tb-brand">
+                    <div class="brand-icon">⚡</div>
+                    <div class="brand-name">GymFlow <span>Cloud</span></div>
+                </div>
+                <div class="tb-right">
+                    <div class="gym-tag" id="gymLabel">CONNECTING...</div>
+                    <div class="av">AD</div>
+                </div>
+            </div>
+
+            <div class="body" style="grid-template-columns: 240px 1fr;">
+                <div class="sidebar">
+                    <div class="sg-lbl">REAL-TIME DATA</div>
+                    <div class="si on">Dashboard <div class="sb sb-g">Live</div></div>
+                    <div class="si">Member Roster</div>
+                    <div class="si">Revenue</div>
+                </div>
+
+                <div class="content">
+                    <div class="pg-head">
+                        <div>
+                            <h1 class="pg-title">Command Centre</h1>
+                            <p class="pg-sub">Cloud-synced multi-tenant telemetry.</p>
+                        </div>
+                        <button class="btn btn-acc" onclick="addMockMember()">+ Provision Member</button>
+                    </div>
+
+                    <div class="kpis">
+                        <div class="kpi">
+                            <div class="kpi-l">ACTIVE MEMBERS</div>
+                            <div class="kpi-v" id="memberCount">0</div>
+                            <div class="kpi-d up" id="newLabel">Cloud Sync Active</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="ct">Live Member Log <span class="ct-action">Auto-Updating</span></div>
+                        <div class="member-mini-list" id="memberList">
+                            <!-- Live Content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const gymId = "demo-gym-1"; // For multi-tenancy, you'd get this from auth
+
+        // 🟢 Real-time Listener for Member Count & List
+        db.collection('members').where('gym_id', '==', gymId)
+          .onSnapshot((querySnapshot) => {
+              const members = [];
+              const listEl = document.getElementById('memberList');
+              listEl.innerHTML = "";
+              
+              document.getElementById('memberCount').textContent = querySnapshot.size;
+              
+              // Fetch Gym Name
+              db.collection('gyms').doc(gymId).get().then(doc => {
+                  if (doc.exists) {
+                      document.getElementById('gymLabel').textContent = "TENANT: " + doc.data().name.toUpperCase();
+                  } else {
+                      document.getElementById('gymLabel').textContent = "TENANT: CLOUD_SYNC_OK";
+                  }
+              });
+
+              querySnapshot.forEach((doc) => {
+                  const m = doc.data();
+                  const item = document.createElement('div');
+                  item.className = 'm-mini-item';
+                  item.style.animation = "fadeIn 0.5s ease out";
+                  item.innerHTML = `
+                      <div class="m-av">${m.name.substring(0,2)}</div>
+                      <div style="flex:1">
+                          <div class="m-name">${m.name}</div>
+                          <div class="m-sub">${m.plan} Plan · Code: ${m.access_code}</div>
+                      </div>
+                      <div class="m-stat-tag active">SYNCHRONIZED</div>
+                  `;
+                  listEl.appendChild(item);
+              });
+          });
+
+        async function addMockMember() {
+            await db.collection('members').add({
+                gym_id: gymId,
+                name: "New Recruit",
+                plan: "Elite",
+                access_code: Math.floor(1000 + Math.random() * 9000).toString(),
+                attendance: 0,
+                joined_date: "Apr 2026"
+            });
+        }
+    </script>
+</body>
+</html>
