@@ -1,0 +1,904 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Bebas+Neue&display=swap');
+
+:root {
+  --g-dark: #0a0a0c;
+  --g-surface: rgba(20, 20, 25, 0.7);
+  --g-border: rgba(255, 255, 255, 0.08);
+  --g-border-bright: rgba(255, 255, 255, 0.15);
+  
+  --acc: #e94560;
+  --acc-glow: rgba(233, 69, 96, 0.3);
+  --teal: #1D9E75;
+  --teal-glow: rgba(29, 158, 117, 0.2);
+  --blue: #378ADD;
+  --amber: #EF9F27;
+  
+  --t-primary: #ffffff;
+  --t-secondary: #a0a0ab;
+  --t-tertiary: #606068;
+  
+  --glass: blur(12px) saturate(180%);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--t-primary);
+  background: var(--g-dark);
+  min-height: 100vh;
+  padding: 24px;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Background Mesh */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 10% 10%, rgba(233, 69, 96, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 90% 90%, rgba(29, 158, 117, 0.05) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(55, 138, 221, 0.02) 0%, transparent 50%);
+  z-index: -1;
+}
+
+.shell {
+  background: var(--g-surface);
+  backdrop-filter: var(--glass);
+  border: 1px solid var(--g-border);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  animation: shellEntry 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes shellEntry {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--g-border);
+  padding: 0 24px;
+  height: 72px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.tb-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 48px;
+}
+
+.brand-icon {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #1a1a2e, #0f3460);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--g-border-bright);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+}
+
+.brand-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  letter-spacing: 1.5px;
+  color: var(--t-primary);
+}
+
+.brand-name span { color: var(--acc); text-shadow: 0 0 15px var(--acc-glow); }
+
+.tb-nav { display: flex; gap: 8px; height: 100%; }
+
+.tb-tab {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--t-secondary);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  border-bottom: 2px solid transparent;
+}
+
+.tb-tab:hover { color: var(--t-primary); background: rgba(255, 255, 255, 0.03); }
+
+.tb-tab.on {
+  color: var(--teal);
+  border-bottom-color: var(--teal);
+}
+
+.tb-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: auto;
+}
+
+.gym-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--teal);
+  padding: 6px 14px;
+  background: var(--teal-glow);
+  border-radius: 100px;
+  border: 1px solid rgba(29, 158, 117, 0.3);
+  letter-spacing: 0.5px;
+}
+
+.notif {
+  position: relative;
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--g-border);
+}
+
+.notif-dot {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--acc);
+  border: 2px solid var(--g-dark);
+  box-shadow: 0 0 10px var(--acc-glow);
+}
+
+.av {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--acc), #A32D2D);
+  color: #fff;
+  font-weight: 800;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid var(--g-border-bright);
+}
+
+.body {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: calc(100vh - 120px);
+}
+
+.sidebar {
+  border-right: 1px solid var(--g-border);
+  background: rgba(0, 0, 0, 0.1);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sg-lbl {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--t-tertiary);
+  padding: 0 12px;
+  margin: 16px 0 8px;
+}
+
+.si {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--t-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.si:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--t-primary);
+  transform: translateX(4px);
+}
+
+.si.on {
+  background: rgba(29, 158, 117, 0.1);
+  color: var(--teal);
+  font-weight: 700;
+}
+
+.si svg { opacity: 0.6; transition: all 0.2s; }
+.si.on svg { opacity: 1; transform: scale(1.1); }
+
+.sb {
+  margin-left: auto;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 100px;
+}
+
+.sb-r { background: rgba(163, 45, 45, 0.2); color: #ff6b6b; border: 1px solid rgba(163, 45, 45, 0.3); }
+.sb-g { background: rgba(29, 158, 117, 0.2); color: #5DCAA5; border: 1px solid rgba(29, 158, 117, 0.3); }
+.sb-a { background: rgba(239, 159, 39, 0.2); color: #FFB347; border: 1px solid rgba(239, 159, 39, 0.3); }
+
+.content {
+  padding: 32px;
+  background: rgba(0, 0, 0, 0.05);
+  overflow-y: auto;
+}
+
+.pg-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.pg-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  letter-spacing: 1px;
+  background: linear-gradient(to bottom, #fff, #a0a0ab);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.pg-sub {
+  font-size: 13px;
+  color: var(--t-tertiary);
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.btn {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 1px solid var(--g-border-bright);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--t-primary);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn:hover { background: rgba(255, 255, 255, 0.1); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+
+.btn-p {
+  background: var(--t-primary);
+  color: var(--g-dark);
+  border: none;
+}
+
+.btn-acc {
+  background: var(--acc);
+  color: #fff;
+  border: none;
+  box-shadow: 0 8px 16px var(--acc-glow);
+}
+
+.btn-acc:hover { box-shadow: 0 12px 24px var(--acc-glow); }
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.kpi {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--g-border);
+  border-radius: 20px;
+  padding: 20px;
+  transition: all 0.3s;
+}
+
+.kpi:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--g-border-bright);
+  transform: translateY(-4px);
+}
+
+.kpi-l { font-size: 11px; font-weight: 700; color: var(--t-tertiary); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+.kpi-v { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.5px; }
+.kpi-d { font-size: 11px; margin-top: 8px; font-weight: 700; display: flex; align-items: center; gap: 4px; }
+
+.up { color: var(--teal); } .dn { color: var(--acc); } .fl { color: var(--t-tertiary); }
+
+.card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--g-border);
+  border-radius: 24px;
+  padding: 24px;
+  height: 100%;
+}
+
+.ct {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--t-primary);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ct-action {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--teal);
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--teal-glow);
+  transition: all 0.2s;
+}
+
+.ct-action:hover { background: rgba(29, 158, 117, 0.3); }
+
+/* Trainer Grid Enhancements */
+.trainer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.tr-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--g-border);
+  border-radius: 16px;
+  padding: 16px;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.tr-card:hover { border-color: var(--g-border-bright); transform: scale(1.02); background: rgba(255, 255, 255, 0.05); }
+
+.tr-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.tr-av { width: 44px; height: 44px; border-radius: 14px; font-size: 14px; }
+.tr-name { font-size: 14px; font-weight: 700; color: var(--t-primary); }
+.tr-spec { font-size: 11px; color: var(--t-tertiary); font-weight: 600; }
+
+.tr-stats { display: flex; gap: 8px; }
+.tr-stat {
+  background: rgba(0,0,0,0.2);
+  border-radius: 10px;
+  padding: 8px;
+  border: 1px solid var(--g-border);
+  flex: 1;
+}
+.tr-stat-v { font-size: 16px; font-weight: 800; font-family: 'Bebas Neue', sans-serif; }
+.tr-stat-l { font-size: 9px; font-weight: 700; color: var(--t-tertiary); text-transform: uppercase; }
+
+.tr-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-top: 12px;
+  text-transform: uppercase;
+}
+.online { background: var(--teal-glow); color: var(--teal); border: 1px solid rgba(29, 158, 117, 0.2); }
+.away { background: rgba(239, 159, 39, 0.1); color: var(--amber); border: 1px solid rgba(239, 159, 39, 0.2); }
+.off { background: rgba(255, 255, 255, 0.05); color: var(--t-tertiary); border: 1px solid var(--g-border); }
+
+/* Schedule Styling */
+.sched-grid { display: flex; flex-direction: column; gap: 8px; }
+.sc-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 16px;
+  border: 1px solid var(--g-border);
+  transition: all 0.2s;
+}
+.sc-item:hover { background: rgba(255, 255, 255, 0.04); border-color: var(--g-border-bright); }
+.sc-time { font-family: 'Bebas Neue', sans-serif; font-size: 18px; color: var(--t-tertiary); min-width: 50px; }
+.sc-name { font-size: 14px; font-weight: 700; }
+.sc-trainer { font-size: 11px; color: var(--t-tertiary); font-weight: 600; }
+.sc-fill-wrap { height: 6px; background: rgba(255,255,255,0.05); border-radius: 100px; overflow: hidden; }
+.sc-fill { height: 100%; border-radius: 100px; box-shadow: 0 0 10px rgba(255,255,255,0.1); }
+
+/* Table-like lists */
+.pay-list, .notif-list, .assign-section { display: flex; flex-direction: column; gap: 8px; }
+.pay-item, .nf-item, .asgn-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 16px;
+  border: 1px solid var(--g-border);
+}
+.pst-ok { background: var(--teal-glow); color: var(--teal); }
+.pst-fail { background: rgba(233, 69, 96, 0.1); color: var(--acc); }
+
+/* Grid Layouts */
+.row2 { display: grid; grid-template-columns: 1.8fr 1fr; gap: 20px; margin-bottom: 20px; }
+.row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 20px; }
+.row-full { margin-bottom: 20px; }
+
+</style>
+
+<h2 class="sr-only">GymFlow owner dashboard — trainers, members, classes, payments and notifications</h2>
+
+<div class="shell">
+
+  <div class="topbar">
+    <div class="tb-brand">
+      <div class="brand-icon">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="1" y="7" width="4" height="4" rx="1" fill="#e94560"/><rect x="13" y="7" width="4" height="4" rx="1" fill="#e94560"/><rect x="5" y="5" width="8" height="8" rx="2" fill="#fff" opacity=".9"/><rect x="7" y="2" width="4" height="14" rx="1" fill="#fff" opacity=".4"/></svg>
+      </div>
+      <span class="brand-name">Gym<span>Flow</span></span>
+    </div>
+    <div class="tb-nav">
+      <div class="tb-tab on">Overview</div>
+      <div class="tb-tab">Trainers</div>
+      <div class="tb-tab">Members</div>
+      <div class="tb-tab">Classes</div>
+      <div class="tb-tab">Payments</div>
+      <div class="tb-tab">Reports</div>
+    </div>
+    <div class="tb-right">
+      <span class="gym-tag">IronHaus · Berlin</span>
+      <div class="notif">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1a5 5 0 0 1 5 5v2.5l1 2H2l1-2V6a5 5 0 0 1 5-5Zm0 14a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2Z" stroke="var(--t2)" stroke-width="1.2"/></svg>
+        <span class="notif-dot"></span>
+      </div>
+      <div class="av">KM</div>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="sidebar">
+      <div class="sg">
+        <div class="sg-lbl">Main</div>
+        <div class="si on">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="1" width="5" height="5" rx="1" fill="currentColor"/><rect x="8" y="1" width="5" height="5" rx="1" fill="currentColor" opacity=".5"/><rect x="1" y="8" width="5" height="5" rx="1" fill="currentColor" opacity=".5"/><rect x="8" y="8" width="5" height="5" rx="1" fill="currentColor"/></svg>
+          Dashboard
+        </div>
+        <div class="si">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="4.5" r="2.5" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 12c0-2.8 2.5-4.5 5.5-4.5s5.5 1.7 5.5 4.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Trainers
+          <span class="sb sb-g">6</span>
+        </div>
+        <div class="si">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M10 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM2 12c0-2.2 2.2-4 5-4s5 1.8 5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Members
+          <span class="sb sb-g">847</span>
+        </div>
+        <div class="si">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M4 3V2M10 3V2M1 6h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Classes
+        </div>
+        <div class="si">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 4v3.5l2 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Schedule
+        </div>
+      </div>
+      <div class="sg">
+        <div class="sg-lbl">Finance</div>
+        <div class="si">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="9" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M1 6h12M4 9h2M9 9h1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Payments
+          <span class="sb sb-r">3</span>
+        </div>
+        <div class="si">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M3 4h5.5a2 2 0 0 1 0 4H3M3 8h6a2 2 0 0 1 0 4H3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Revenue
+        </div>
+      </div>
+      <div class="sg">
+        <div class="sg-lbl">Retention</div>
+        <div class="si">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2C4.8 2 3 3.8 3 6c0 3 4 7 4 7s4-4 4-7c0-2.2-1.8-4-4-4Z" stroke="currentColor" stroke-width="1.2"/></svg>
+          At-risk
+          <span class="sb sb-r">12</span>
+        </div>
+        <div class="si">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 3h10M2 7h7M2 11h9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Campaigns
+          <span class="sb sb-a">2</span>
+        </div>
+        <div class="si">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1l1.8 3.6L13 5.5l-3 2.9.7 4.1L7 10.5l-3.7 2 .7-4.1-3-2.9 4.2-.9z" stroke="currentColor" stroke-width="1.2"/></svg>
+          Progress tracking
+        </div>
+      </div>
+      <div class="sg">
+        <div class="sg-lbl">Settings</div>
+        <div class="si">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M7 1v2M7 11v2M1 7h2M11 7h2M2.9 2.9l1.4 1.4M9.7 9.7l1.4 1.4M2.9 11.1l1.4-1.4M9.7 4.3l1.4-1.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Settings
+        </div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="pg-head">
+        <div>
+          <div class="pg-title">Owner Command Centre</div>
+          <div class="pg-sub">Sunday 12 Apr 2026 · IronHaus Fitness, Berlin · 6 trainers · 847 members</div>
+        </div>
+        <div class="act-row">
+          <button class="btn">Export report</button>
+          <button class="btn btn-p">+ Add trainer</button>
+          <button class="btn btn-acc">+ Add member</button>
+        </div>
+      </div>
+
+      <div class="kpis">
+        <div class="kpi"><div class="kpi-l">Active members</div><div class="kpi-v">847</div><div class="kpi-d up">↑ 23 this month</div></div>
+        <div class="kpi"><div class="kpi-l">MRR (EUR)</div><div class="kpi-v">€41.2K</div><div class="kpi-d up">↑ 4.2%</div></div>
+        <div class="kpi"><div class="kpi-l">Classes today</div><div class="kpi-v">9</div><div class="kpi-d fl">3 upcoming</div></div>
+        <div class="kpi"><div class="kpi-l">Failed payments</div><div class="kpi-v">3</div><div class="kpi-d dn">↑ 1 new</div></div>
+        <div class="kpi"><div class="kpi-l">At-risk members</div><div class="kpi-v">12</div><div class="kpi-d dn">↑ 3 flagged</div></div>
+      </div>
+
+      <div class="row2">
+        <div class="card">
+          <div class="ct">Trainer roster — active today <span class="ct-action">Manage all</span></div>
+          <div class="trainer-grid">
+            <div class="tr-card">
+              <div class="tr-head">
+                <div class="tr-av" style="background:#E1F5EE;color:#085041">MK</div>
+                <div><div class="tr-name">Marcus Klein</div><div class="tr-spec">Strength & conditioning</div></div>
+              </div>
+              <div class="tr-stats">
+                <div class="tr-stat"><div class="tr-stat-v">14</div><div class="tr-stat-l">members</div></div>
+                <div class="tr-stat"><div class="tr-stat-v">3</div><div class="tr-stat-l">classes/day</div></div>
+              </div>
+              <div class="tr-badge online">Online now</div>
+            </div>
+            <div class="tr-card">
+              <div class="tr-head">
+                <div class="tr-av" style="background:#E6F1FB;color:#0C447C">SP</div>
+                <div><div class="tr-name">Sofia Petrov</div><div class="tr-spec">Cardio & HIIT</div></div>
+              </div>
+              <div class="tr-stats">
+                <div class="tr-stat"><div class="tr-stat-v">21</div><div class="tr-stat-l">members</div></div>
+                <div class="tr-stat"><div class="tr-stat-v">4</div><div class="tr-stat-l">classes/day</div></div>
+              </div>
+              <div class="tr-badge online">Online now</div>
+            </div>
+            <div class="tr-card">
+              <div class="tr-head">
+                <div class="tr-av" style="background:#FAEEDA;color:#633806">JN</div>
+                <div><div class="tr-name">James Nwosu</div><div class="tr-spec">Powerlifting</div></div>
+              </div>
+              <div class="tr-stats">
+                <div class="tr-stat"><div class="tr-stat-v">9</div><div class="tr-stat-l">members</div></div>
+                <div class="tr-stat"><div class="tr-stat-v">2</div><div class="tr-stat-l">classes/day</div></div>
+              </div>
+              <div class="tr-badge away">Break</div>
+            </div>
+            <div class="tr-card">
+              <div class="tr-head">
+                <div class="tr-av" style="background:#FBEAF0;color:#72243E">LH</div>
+                <div><div class="tr-name">Lena Hofer</div><div class="tr-spec">Functional fitness</div></div>
+              </div>
+              <div class="tr-stats">
+                <div class="tr-stat"><div class="tr-stat-v">17</div><div class="tr-stat-l">members</div></div>
+                <div class="tr-stat"><div class="tr-stat-v">3</div><div class="tr-stat-l">classes/day</div></div>
+              </div>
+              <div class="tr-badge online">Online now</div>
+            </div>
+            <div class="tr-card">
+              <div class="tr-head">
+                <div class="tr-av" style="background:#EAF3DE;color:#27500A">RB</div>
+                <div><div class="tr-name">Ravi Batra</div><div class="tr-spec">Mobility & recovery</div></div>
+              </div>
+              <div class="tr-stats">
+                <div class="tr-stat"><div class="tr-stat-v">11</div><div class="tr-stat-l">members</div></div>
+                <div class="tr-stat"><div class="tr-stat-v">2</div><div class="tr-stat-l">classes/day</div></div>
+              </div>
+              <div class="tr-badge off">Day off</div>
+            </div>
+            <div class="tr-card">
+              <div class="tr-head">
+                <div class="tr-av" style="background:#EEEDFE;color:#3C3489">AV</div>
+                <div><div class="tr-name">Anya Volkov</div><div class="tr-spec">Olympic lifting</div></div>
+              </div>
+              <div class="tr-stats">
+                <div class="tr-stat"><div class="tr-stat-v">8</div><div class="tr-stat-l">members</div></div>
+                <div class="tr-stat"><div class="tr-stat-v">2</div><div class="tr-stat-l">classes/day</div></div>
+              </div>
+              <div class="tr-badge online">Online now</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div class="card">
+            <div class="ct">Today's class schedule <span class="ct-action">Full calendar</span></div>
+            <div class="sched-grid">
+              <div class="sc-item">
+                <div class="sc-time">06:00</div>
+                <div>
+                  <div class="sc-name">Morning HIIT</div>
+                  <div class="sc-trainer">Sofia P.</div>
+                </div>
+                <div class="sc-bar">
+                  <div class="sc-fill-wrap"><div class="sc-fill" style="width:90%;background:#1D9E75"></div></div>
+                  <div class="sc-cap">18/20</div>
+                </div>
+                <div class="sc-dot" style="background:#1D9E75"></div>
+              </div>
+              <div class="sc-item">
+                <div class="sc-time">08:30</div>
+                <div>
+                  <div class="sc-name">Strength circuit</div>
+                  <div class="sc-trainer">Marcus K.</div>
+                </div>
+                <div class="sc-bar">
+                  <div class="sc-fill-wrap"><div class="sc-fill" style="width:60%;background:#BA7517"></div></div>
+                  <div class="sc-cap">12/20</div>
+                </div>
+                <div class="sc-dot" style="background:#1D9E75"></div>
+              </div>
+              <div class="sc-item">
+                <div class="sc-time">10:00</div>
+                <div>
+                  <div class="sc-name">Powerlifting 101</div>
+                  <div class="sc-trainer">James N.</div>
+                </div>
+                <div class="sc-bar">
+                  <div class="sc-fill-wrap"><div class="sc-fill" style="width:50%;background:#BA7517"></div></div>
+                  <div class="sc-cap">8/16</div>
+                </div>
+                <div class="sc-dot" style="background:#BA7517"></div>
+              </div>
+              <div class="sc-item">
+                <div class="sc-time">12:00</div>
+                <div>
+                  <div class="sc-name">Functional flow</div>
+                  <div class="sc-trainer">Lena H.</div>
+                </div>
+                <div class="sc-bar">
+                  <div class="sc-fill-wrap"><div class="sc-fill" style="width:35%;background:#185FA5"></div></div>
+                  <div class="sc-cap">7/20</div>
+                </div>
+                <div class="sc-dot" style="background:#185FA5"></div>
+              </div>
+              <div class="sc-item">
+                <div class="sc-time">18:00</div>
+                <div>
+                  <div class="sc-name">Evening HIIT</div>
+                  <div class="sc-trainer">Sofia P.</div>
+                </div>
+                <div class="sc-bar">
+                  <div class="sc-fill-wrap"><div class="sc-fill" style="width:75%;background:#1D9E75"></div></div>
+                  <div class="sc-cap">15/20</div>
+                </div>
+                <div class="sc-dot" style="background:#1D9E75"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row3">
+        <div class="card">
+          <div class="ct">Trainer → member assignments <span class="ct-action">Reassign</span></div>
+          <div class="assign-section">
+            <div class="asgn-row">
+              <div class="mb-av" style="width:26px;height:26px;background:#E1F5EE;color:#085041;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">PR</div>
+              <div class="asgn-member">Priya Rajan</div>
+              <div class="asgn-arrow">→</div>
+              <div class="asgn-trainer">Marcus K.</div>
+              <div class="asgn-since">12 weeks</div>
+              <button class="asgn-btn">Change</button>
+            </div>
+            <div class="asgn-row">
+              <div class="mb-av" style="width:26px;height:26px;background:#FAC775;color:#412402;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">MH</div>
+              <div class="asgn-member">Marco Hiller</div>
+              <div class="asgn-arrow">→</div>
+              <div class="asgn-trainer">Sofia P.</div>
+              <div class="asgn-since">8 weeks</div>
+              <button class="asgn-btn">Change</button>
+            </div>
+            <div class="asgn-row">
+              <div class="mb-av" style="width:26px;height:26px;background:#EEEDFE;color:#3C3489;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">YK</div>
+              <div class="asgn-member">Yuki Kato</div>
+              <div class="asgn-arrow">→</div>
+              <div class="asgn-trainer">Anya V.</div>
+              <div class="asgn-since">5 weeks</div>
+              <button class="asgn-btn">Change</button>
+            </div>
+            <div class="asgn-row">
+              <div class="mb-av" style="width:26px;height:26px;background:#FBEAF0;color:#72243E;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">LS</div>
+              <div class="asgn-member">Lena Schulz</div>
+              <div class="asgn-arrow">→</div>
+              <div class="asgn-trainer">Lena H.</div>
+              <div class="asgn-since">3 weeks</div>
+              <button class="asgn-btn">Change</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="ct">Member progress tracking <span class="ct-action">View all</span></div>
+          <div class="prog-summary">
+            <div class="ps-card">
+              <div class="ps-name">Priya Rajan</div>
+              <div class="ps-metric"><span class="ps-ml">Attendance</span><span class="ps-mv">92%</span></div>
+              <div class="ps-bar2"><div class="ps-fill2" style="width:92%;background:#1D9E75"></div></div>
+              <div class="ps-metric" style="margin-top:5px"><span class="ps-ml">Goal progress</span><span class="ps-mv">78%</span></div>
+              <div class="ps-bar2"><div class="ps-fill2" style="width:78%;background:#185FA5"></div></div>
+            </div>
+            <div class="ps-card">
+              <div class="ps-name">Marco Hiller</div>
+              <div class="ps-metric"><span class="ps-ml">Attendance</span><span class="ps-mv">67%</span></div>
+              <div class="ps-bar2"><div class="ps-fill2" style="width:67%;background:#BA7517"></div></div>
+              <div class="ps-metric" style="margin-top:5px"><span class="ps-ml">Goal progress</span><span class="ps-mv">45%</span></div>
+              <div class="ps-bar2"><div class="ps-fill2" style="width:45%;background:#BA7517"></div></div>
+            </div>
+            <div class="ps-card">
+              <div class="ps-name">Yuki Kato</div>
+              <div class="ps-metric"><span class="ps-ml">Attendance</span><span class="ps-mv">85%</span></div>
+              <div class="ps-bar2"><div class="ps-fill2" style="width:85%;background:#1D9E75"></div></div>
+              <div class="ps-metric" style="margin-top:5px"><span class="ps-ml">Goal progress</span><span class="ps-mv">61%</span></div>
+              <div class="ps-bar2"><div class="ps-fill2" style="width:61%;background:#185FA5"></div></div>
+            </div>
+            <div class="ps-card">
+              <div class="ps-name">Jana Svoboda</div>
+              <div class="ps-metric"><span class="ps-ml">Attendance</span><span class="ps-mv">22%</span></div>
+              <div class="ps-bar2"><div class="ps-fill2" style="width:22%;background:#A32D2D"></div></div>
+              <div class="ps-metric" style="margin-top:5px"><span class="ps-ml">Goal progress</span><span class="ps-mv">18%</span></div>
+              <div class="ps-bar2"><div class="ps-fill2" style="width:18%;background:#A32D2D"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="ct">Push notifications &amp; alerts <span class="ct-action">Send new</span></div>
+          <div class="notif-list">
+            <div class="nf-item">
+              <div class="nf-icon" style="background:#FCEBEB">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 2C4.8 2 3 3.8 3 6c0 3 4 7 4 7s4-4 4-7c0-2.2-1.8-4-4-4Z" fill="#A32D2D"/></svg>
+              </div>
+              <div class="nf-body">
+                <div class="nf-title">Jana Svoboda — 22 days absent</div>
+                <div class="nf-sub">Auto-flagged · at-risk of churn</div>
+                <div class="nf-act" style="background:#FCEBEB;color:#791F1F">Send retention message</div>
+              </div>
+              <div class="nf-time">09:41</div>
+            </div>
+            <div class="nf-item">
+              <div class="nf-icon" style="background:#FAEEDA">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1" y="3" width="12" height="9" rx="1.5" stroke="#BA7517" stroke-width="1.2"/><path d="M1 6h12" stroke="#BA7517" stroke-width="1.2"/></svg>
+              </div>
+              <div class="nf-body">
+                <div class="nf-title">Payment failed — Remi Okafor</div>
+                <div class="nf-sub">€29 · retry 1 of 3 scheduled</div>
+                <div class="nf-act" style="background:#FAEEDA;color:#633806">Review payment</div>
+              </div>
+              <div class="nf-time">08:15</div>
+            </div>
+            <div class="nf-item">
+              <div class="nf-icon" style="background:#E1F5EE">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="nf-body">
+                <div class="nf-title">Evening HIIT — 15 bookings confirmed</div>
+                <div class="nf-sub">Reminder sent · 18:00 today</div>
+              </div>
+              <div class="nf-time">07:00</div>
+            </div>
+            <div class="nf-item">
+              <div class="nf-icon" style="background:#E6F1FB">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#185FA5" stroke-width="1.2"/><path d="M7 4v3.5l2 1.5" stroke="#185FA5" stroke-width="1.2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="nf-body">
+                <div class="nf-title">Membership renewal due — 8 members</div>
+                <div class="nf-sub">Auto-reminders sent · 7 days ahead</div>
+              </div>
+              <div class="nf-time">06:00</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card row-full">
+        <div class="ct">Automated payments — recent activity <span class="ct-action">Full billing view</span></div>
+        <div class="pay-list">
+          <div class="pay-item">
+            <div class="mb-av" style="width:28px;height:28px;background:#E1F5EE;color:#085041;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">PR</div>
+            <div class="pay-name">Priya Rajan<div class="pay-plan">Pro · monthly</div></div>
+            <div class="pay-amt">€49</div>
+            <span class="pay-st pst-ok">Paid</span>
+          </div>
+          <div class="pay-item">
+            <div class="mb-av" style="width:28px;height:28px;background:#FAC775;color:#412402;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">RO</div>
+            <div class="pay-name">Remi Okafor<div class="pay-plan">Basic · monthly</div></div>
+            <div class="pay-amt">€29</div>
+            <span class="pay-st pst-fail">Failed</span>
+          </div>
+          <div class="pay-item">
+            <div class="mb-av" style="width:28px;height:28px;background:#EEEDFE;color:#3C3489;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">YK</div>
+            <div class="pay-name">Yuki Kato<div class="pay-plan">Elite · annual</div></div>
+            <div class="pay-amt">€799</div>
+            <span class="pay-st pst-ok">Paid</span>
+          </div>
+          <div class="pay-item">
+            <div class="mb-av" style="width:28px;height:28px;background:#F4C0D1;color:#72243E;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">LS</div>
+            <div class="pay-name">Lena Schulz<div class="pay-plan">Pro · monthly — retry 1/3</div></div>
+            <div class="pay-amt">€49</div>
+            <span class="pay-st pst-retry">Retrying</span>
+          </div>
+          <div class="pay-item">
+            <div class="mb-av" style="width:28px;height:28px;background:#C0DD97;color:#27500A;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">TA</div>
+            <div class="pay-name">Tariq Al-Amin<div class="pay-plan">Basic · monthly · renewal Apr 15</div></div>
+            <div class="pay-amt">€29</div>
+            <span class="pay-st pst-due">Due soon</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+document.querySelectorAll('.tb-tab').forEach(t=>{
+  t.addEventListener('click',function(){
+    document.querySelectorAll('.tb-tab').forEach(x=>x.classList.remove('on'));
+    this.classList.add('on');
+  });
+});
+document.querySelectorAll('.si').forEach(s=>{
+  s.addEventListener('click',function(){
+    document.querySelectorAll('.si').forEach(x=>x.classList.remove('on'));
+    this.classList.add('on');
+  });
+});
+document.querySelectorAll('.asgn-btn').forEach(b=>{
+  b.addEventListener('click',function(){
+    const row=this.closest('.asgn-row');
+    const member=row.querySelector('.asgn-member').textContent;
+    const trainer=row.querySelector('.asgn-trainer').textContent;
+    sendPrompt('I want to reassign '+member+' from '+trainer+' to a different trainer. Show me the reassignment flow.');
+  });
+});
+document.querySelectorAll('.nf-act').forEach(b=>{
+  b.addEventListener('click',function(){
+    const title=this.closest('.nf-item').querySelector('.nf-title').textContent;
+    sendPrompt('Help me take action on this alert: "'+title+'"');
+  });
+});
+document.querySelectorAll('.ct-action').forEach(a=>{
+  a.addEventListener('click',function(){
+    const section=this.closest('.card').querySelector('.ct').childNodes[0].textContent.trim();
+    sendPrompt('Show me the full '+section+' view with all details.');
+  });
+});
+</script>

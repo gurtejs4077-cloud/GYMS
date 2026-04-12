@@ -1,0 +1,708 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Syne:wght@700;800&display=swap');
+
+:root {
+  --bg: #0d0d0f;
+  --bg-surface: #161618;
+  --acc: #5DCAA5;
+  --acc-bright: #9FE1CB;
+  --acc-deep: #1D9E75;
+  --hi: #e94560;
+  --amber: #EF9F27;
+  --blue: #378ADD;
+  
+  --t-primary: #f0f0f2;
+  --t-secondary: #a0a0ab;
+  --t-tertiary: #606068;
+  
+  --r-xl: 32px;
+  --r-lg: 20px;
+  --r-md: 12px;
+  
+  --glass: blur(16px) saturate(180%);
+  --border: rgba(255, 255, 255, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: var(--bg);
+  color: var(--t-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.stage {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 1200px;
+  width: 100%;
+}
+
+/* Phone Frame */
+.phone {
+  width: 360px;
+  height: 760px;
+  background: var(--bg);
+  border-radius: 54px;
+  border: 4px solid #26262a;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255,255,255,0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.phone::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% -20%, rgba(93, 202, 165, 0.15), transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.phone-notch {
+  height: 44px;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+.notch-time { font-size: 14px; font-weight: 700; }
+.notch-icons { display: flex; gap: 6px; align-items: center; }
+
+.screen {
+  flex: 1;
+  padding: 12px 20px 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+  z-index: 1;
+}
+
+.screen::-webkit-scrollbar { display: none; }
+
+.s-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.s-greet { font-size: 12px; font-weight: 600; color: var(--t-secondary); }
+.s-name { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800; line-height: 1; margin-top: 4px; }
+.s-av {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--acc-deep), var(--acc));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  color: #04342C;
+  box-shadow: 0 10px 20px rgba(29, 158, 117, 0.3);
+}
+
+.notif-banner {
+  background: rgba(29, 158, 117, 0.1);
+  border: 1px solid rgba(29, 158, 117, 0.2);
+  border-radius: 16px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.nb-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 10px var(--acc); }
+.nb-text { font-size: 11px; font-weight: 500; line-height: 1.4; flex: 1; }
+.nb-text span { color: var(--acc); font-weight: 700; }
+
+.hero-card {
+  background: linear-gradient(145deg, var(--acc-deep), #146c51);
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 40px -10px rgba(29, 158, 117, 0.4);
+}
+
+.hero-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200px;
+  height: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  filter: blur(40px);
+}
+
+.hero-plan { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 8px; }
+.hero-title { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+.hero-row { display: flex; align-items: center; gap: 20px; }
+.hero-stat-v { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; }
+.hero-stat-l { font-size: 10px; font-weight: 600; opacity: 0.7; margin-top: 2px; }
+.hero-btn {
+  margin-left: auto;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sec-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+
+.quick-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+.qb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.qb-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.qb:hover .qb-icon { transform: translateY(-5px); border-color: var(--acc); background: rgba(93, 202, 165, 0.1); }
+.qb-lbl { font-size: 10px; font-weight: 700; color: var(--t-secondary); }
+
+.cl-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  transition: all 0.2s;
+}
+.cl-item:hover { border-color: var(--acc); transform: scale(1.02); }
+.cl-time { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; }
+.cl-ampm { font-size: 10px; font-weight: 700; color: var(--t-tertiary); }
+.cl-name { font-size: 14px; font-weight: 700; }
+.cl-trainer { font-size: 11px; color: var(--t-secondary); margin-top: 2px; }
+.cl-book {
+  background: var(--acc-deep);
+  color: #fff;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 12px;
+  border: none;
+  font-size: 12px;
+}
+.cl-booked { background: rgba(29, 158, 117, 0.1); color: var(--acc); border: 1px solid var(--acc); }
+
+.prog-card {
+  background: var(--bg-surface);
+  border-radius: 24px;
+  padding: 20px;
+  border: 1px solid var(--border);
+}
+.prog-pct { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--acc); }
+.pm { background: rgba(255,255,255,0.03); border-radius: 14px; padding: 12px; text-align: center; }
+.pm-v { font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 800; }
+.pm-l { font-size: 9px; font-weight: 700; color: var(--t-tertiary); text-transform: uppercase; margin-top: 4px; }
+.prog-bar-wrap { height: 8px; background: rgba(255,255,255,0.05); border-radius: 100px; margin: 16px 0; }
+.prog-bar-fill { height: 100%; border-radius: 100px; background: linear-gradient(to right, var(--acc-deep), var(--acc)); }
+
+.qr-box {
+  background: linear-gradient(135deg, #1e1e21, #0d0d0f);
+  border-radius: 24px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.qr-graphic {
+  width: 80px;
+  height: 80px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 8px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+.qc { background: #000; border-radius: 1px; }
+.qe { background: #fff; }
+
+.bottom-nav {
+  height: 80px;
+  background: rgba(13, 13, 15, 0.8);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 12px 20px;
+}
+.bn-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.bn-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+}
+.bn-item.on .bn-icon { background: rgba(93, 202, 165, 0.15); color: var(--acc); }
+.bn-lbl { font-size: 10px; font-weight: 700; color: var(--t-tertiary); }
+.bn-item.on .bn-lbl { color: var(--acc); }
+
+/* Info Panel Enhancements */
+.panel-info { flex: 1; max-width: 360px; }
+.info-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.ic-label { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: var(--t-tertiary); text-transform: uppercase; margin-bottom: 16px; }
+.feature-tag {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  padding: 8px 14px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--t-secondary);
+}
+.feature-tag:hover { background: rgba(255,255,255,0.06); color: #fff; }
+
+</style>
+
+<h2 class="sr-only">GymFlow member-facing mobile app — home, classes, progress, payments and QR check-in</h2>
+
+<div class="stage">
+
+  <div class="phone">
+    <div class="phone-notch">
+      <span class="notch-time">9:41</span>
+      <div class="notch-icons">
+        <div class="notch-dot"></div>
+        <svg width="14" height="10" viewBox="0 0 14 10" fill="none"><rect x="0" y="5" width="2" height="5" rx="1" fill="#5DCAA5"/><rect x="3" y="3" width="2" height="7" rx="1" fill="#5DCAA5"/><rect x="6" y="1" width="2" height="9" rx="1" fill="#5DCAA5"/><rect x="9" y="0" width="2" height="10" rx="1" fill="rgba(93,202,165,0.3)"/><rect x="12" y="0" width="2" height="10" rx="1" fill="rgba(93,202,165,0.3)"/></svg>
+        <svg width="14" height="11" viewBox="0 0 14 11" fill="none"><rect x="0.5" y="0.5" width="11" height="9" rx="2" stroke="#5DCAA5" stroke-width="1"/><rect x="12" y="3.5" width="1.5" height="4" rx=".75" fill="#5DCAA5"/><rect x="2" y="2.5" width="7" height="6" rx="1" fill="#5DCAA5"/></svg>
+      </div>
+    </div>
+
+    <div class="screen">
+      <div class="screen-inner">
+
+        <div class="s-header">
+          <div>
+            <div class="s-greet">Good morning</div>
+            <div class="s-name">Priya Rajan</div>
+          </div>
+          <div class="s-av">PR</div>
+        </div>
+
+        <div class="notif-banner">
+          <div class="nb-dot"></div>
+          <div class="nb-text">Your trainer <span>Marcus K.</span> posted a new workout plan for this week</div>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="#5DCAA5" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+
+        <div class="hero-card">
+          <div class="hero-plan">PRO PLAN · ACTIVE</div>
+          <div class="hero-title">IronHaus Fitness, Berlin</div>
+          <div class="hero-row">
+            <div class="hero-stat">
+              <div class="hero-stat-v">22</div>
+              <div class="hero-stat-l">days left</div>
+            </div>
+            <div class="hero-divider"></div>
+            <div class="hero-stat">
+              <div class="hero-stat-v">92%</div>
+              <div class="hero-stat-l">attendance</div>
+            </div>
+            <div class="hero-divider"></div>
+            <div class="hero-stat">
+              <div class="hero-stat-v">12</div>
+              <div class="hero-stat-l">wks active</div>
+            </div>
+            <button class="hero-btn">Renew</button>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <div class="sec-title">Quick actions</div>
+        </div>
+        <div class="quick-grid">
+          <div class="qb">
+            <div class="qb-icon" style="background:rgba(29,158,117,0.15)">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" stroke="#5DCAA5" stroke-width="1.3"/><rect x="9" y="1" width="6" height="6" rx="1.5" stroke="#5DCAA5" stroke-width="1.3"/><rect x="1" y="9" width="6" height="6" rx="1.5" stroke="#5DCAA5" stroke-width="1.3"/><rect x="10" y="10" width="1.5" height="4" rx=".75" fill="#5DCAA5"/><rect x="9" y="11.5" width="4" height="1.5" rx=".75" fill="#5DCAA5"/></svg>
+            </div>
+            <div class="qb-lbl">Check in</div>
+          </div>
+          <div class="qb">
+            <div class="qb-icon" style="background:rgba(55,138,221,0.15)">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="11" rx="1.5" stroke="#378ADD" stroke-width="1.2"/><path d="M1 6h14M5 3V1M11 3V1" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/></svg>
+            </div>
+            <div class="qb-lbl">Book class</div>
+          </div>
+          <div class="qb">
+            <div class="qb-icon" style="background:rgba(239,159,39,0.15)">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.8 3.6L14 5.5l-3 2.9.7 4.1L8 10.5l-3.7 2 .7-4.1-3-2.9 4.2-.9z" stroke="#EF9F27" stroke-width="1.2"/></svg>
+            </div>
+            <div class="qb-lbl">Progress</div>
+          </div>
+          <div class="qb">
+            <div class="qb-icon" style="background:rgba(233,69,96,0.15)">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="4" width="14" height="9" rx="1.5" stroke="#e94560" stroke-width="1.2"/><path d="M4 4V3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v1M1 8h14" stroke="#e94560" stroke-width="1.2" stroke-linecap="round"/></svg>
+            </div>
+            <div class="qb-lbl">Payments</div>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <div class="sec-title">Today's classes</div>
+          <div class="sec-more">See all</div>
+        </div>
+        <div class="class-list">
+          <div class="cl-item">
+            <div class="cl-time-block">
+              <div class="cl-time">6:00</div>
+              <div class="cl-ampm">AM</div>
+            </div>
+            <div class="cl-divider"></div>
+            <div class="cl-info">
+              <div class="cl-name">Morning HIIT</div>
+              <div class="cl-trainer">Sofia P. · 45 min</div>
+            </div>
+            <span class="cl-spots spots-low">2 left</span>
+            <button class="cl-book cl-booked">Booked</button>
+          </div>
+          <div class="cl-item">
+            <div class="cl-time-block">
+              <div class="cl-time">8:30</div>
+              <div class="cl-ampm">AM</div>
+            </div>
+            <div class="cl-divider"></div>
+            <div class="cl-info">
+              <div class="cl-name">Strength circuit</div>
+              <div class="cl-trainer">Marcus K. · 60 min</div>
+            </div>
+            <span class="cl-spots spots-ok">8 left</span>
+            <button class="cl-book" id="book1">Book</button>
+          </div>
+          <div class="cl-item">
+            <div class="cl-time-block">
+              <div class="cl-time">6:00</div>
+              <div class="cl-ampm">PM</div>
+            </div>
+            <div class="cl-divider"></div>
+            <div class="cl-info">
+              <div class="cl-name">Evening HIIT</div>
+              <div class="cl-trainer">Sofia P. · 45 min</div>
+            </div>
+            <span class="cl-spots spots-ok">5 left</span>
+            <button class="cl-book" id="book2">Book</button>
+          </div>
+          <div class="cl-item">
+            <div class="cl-time-block">
+              <div class="cl-time">7:30</div>
+              <div class="cl-ampm">PM</div>
+            </div>
+            <div class="cl-divider"></div>
+            <div class="cl-info">
+              <div class="cl-name">Functional flow</div>
+              <div class="cl-trainer">Lena H. · 50 min</div>
+            </div>
+            <span class="cl-spots spots-full">Full</span>
+            <button class="cl-book" style="background:#2a2a2e;color:#606068;cursor:default">Waitlist</button>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <div class="sec-title">My progress</div>
+          <div class="sec-more">Full report</div>
+        </div>
+        <div class="progress-section">
+          <div class="prog-card">
+            <div class="prog-head">
+              <div class="prog-trainer">
+                <div class="ptr-av">MK</div>
+                <div>
+                  <div class="ptr-name">Marcus Klein</div>
+                  <div class="ptr-role">Your trainer</div>
+                </div>
+              </div>
+              <div>
+                <div style="font-size:9px;color:var(--t3);text-align:right;margin-bottom:1px">Goal progress</div>
+                <div class="prog-pct">78%</div>
+              </div>
+            </div>
+            <div class="prog-metrics">
+              <div class="pm"><div class="pm-v">47</div><div class="pm-l">Sessions done</div></div>
+              <div class="pm"><div class="pm-v">6.2</div><div class="pm-l">kg lost</div></div>
+              <div class="pm"><div class="pm-v">+14%</div><div class="pm-l">Strength</div></div>
+            </div>
+            <div class="prog-bar-wrap"><div class="prog-bar-fill" style="width:78%"></div></div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px">
+              <span style="font-size:9px;color:var(--t3)">Started Jan 2026</span>
+              <span style="font-size:9px;color:var(--acc)">Goal: Jun 2026</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <div class="sec-title">Check-in QR</div>
+        </div>
+        <div class="qr-section">
+          <div class="qr-box">
+            <div class="qr-graphic" id="qr-grid"></div>
+            <div class="qr-info">
+              <div class="qr-title">Scan at any gate</div>
+              <div class="qr-sub">Works offline · refreshes every 60s</div>
+              <div class="qr-id">PR-2891-IRON</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <div class="sec-title">Payment history</div>
+          <div class="sec-more">View all</div>
+        </div>
+        <div class="payment-list">
+          <div class="pay-row">
+            <div class="pay-icon" style="background:rgba(29,158,117,0.12)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1ZM1 7h12" stroke="#5DCAA5" stroke-width="1.2"/></svg>
+            </div>
+            <div class="pay-info">
+              <div class="pay-name">Pro plan · April</div>
+              <div class="pay-date">Apr 1, 2026</div>
+            </div>
+            <div class="pay-amt">€49</div>
+            <span class="pay-st ok">Paid</span>
+          </div>
+          <div class="pay-row">
+            <div class="pay-icon" style="background:rgba(29,158,117,0.12)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 4h10a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1ZM1 7h12" stroke="#5DCAA5" stroke-width="1.2"/></svg>
+            </div>
+            <div class="pay-info">
+              <div class="pay-name">Pro plan · March</div>
+              <div class="pay-date">Mar 1, 2026</div>
+            </div>
+            <div class="pay-amt">€49</div>
+            <span class="pay-st ok">Paid</span>
+          </div>
+          <div class="pay-row">
+            <div class="pay-icon" style="background:rgba(55,138,221,0.12)">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="#378ADD" stroke-width="1.2"/><path d="M7 4v3.5l2 1.5" stroke="#378ADD" stroke-width="1.2" stroke-linecap="round"/></svg>
+            </div>
+            <div class="pay-info">
+              <div class="pay-name">Pro plan · May</div>
+              <div class="pay-date">Due May 1, 2026</div>
+            </div>
+            <div class="pay-amt">€49</div>
+            <span class="pay-st due">Upcoming</span>
+          </div>
+        </div>
+
+        <div style="height:16px"></div>
+
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="bn-item on">
+        <div class="bn-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 6.5L8 2l6 4.5V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6.5Z" stroke="#5DCAA5" stroke-width="1.2"/></svg>
+        </div>
+        <div class="bn-lbl" style="color:#5DCAA5">Home</div>
+      </div>
+      <div class="bn-item">
+        <div class="bn-icon" style="position:relative">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="3" width="14" height="11" rx="1.5" stroke="#606068" stroke-width="1.2"/><path d="M1 6h14M5 3V1M11 3V1" stroke="#606068" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="bn-lbl">Classes</div>
+      </div>
+      <div class="bn-item">
+        <div class="bn-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.8 3.6L14 5.5l-3 2.9.7 4.1L8 10.5l-3.7 2 .7-4.1-3-2.9 4.2-.9z" stroke="#606068" stroke-width="1.2"/></svg>
+        </div>
+        <div class="bn-lbl">Progress</div>
+      </div>
+      <div class="bn-item">
+        <div class="bn-icon" style="position:relative">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1a5 5 0 0 1 5 5v2.5l1 2H2l1-2V6a5 5 0 0 1 5-5Zm0 14a2 2 0 0 1-2-2h4a2 2 0 0 1-2 2Z" stroke="#606068" stroke-width="1.2"/></svg>
+          <div class="bn-badge"></div>
+        </div>
+        <div class="bn-lbl">Alerts</div>
+      </div>
+      <div class="bn-item">
+        <div class="bn-icon">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="#606068" stroke-width="1.2"/><path d="M2 14c0-3.3 2.7-5 6-5s6 1.7 6 5" stroke="#606068" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="bn-lbl">Profile</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel-info">
+    <div class="info-card">
+      <div class="ic-label">Screen breakdown</div>
+      <div class="ic-row">
+        <div class="ic-dot" style="background:#5DCAA5"></div>
+        <div class="ic-name">Home / dashboard</div>
+        <div class="ic-val">Active</div>
+      </div>
+      <div class="ic-row">
+        <div class="ic-dot" style="background:#378ADD"></div>
+        <div class="ic-name">Class booking</div>
+        <div class="ic-val">Live capacity</div>
+      </div>
+      <div class="ic-row">
+        <div class="ic-dot" style="background:#EF9F27"></div>
+        <div class="ic-name">Progress tracker</div>
+        <div class="ic-val">Trainer-linked</div>
+      </div>
+      <div class="ic-row">
+        <div class="ic-dot" style="background:#e94560"></div>
+        <div class="ic-name">Payment history</div>
+        <div class="ic-val">Auto-billing</div>
+      </div>
+      <div class="ic-row">
+        <div class="ic-dot" style="background:#AFA9EC"></div>
+        <div class="ic-name">QR check-in</div>
+        <div class="ic-val">Offline-ready</div>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="ic-label">Member features</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:2px">
+        <span class="feature-tag">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1"/><rect x="7" y="1" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1"/><rect x="1" y="7" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1"/><rect x="8" y="8.5" width="1.2" height="2.5" rx=".6" fill="currentColor"/><rect x="7" y="9.7" width="2.5" height="1.2" rx=".6" fill="currentColor"/></svg>
+          QR check-in
+        </span>
+        <span class="feature-tag">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="8" rx="1" stroke="currentColor" stroke-width="1"/><path d="M1 5h10M4 2V1M8 2V1" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+          Class booking
+        </span>
+        <span class="feature-tag">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1l1.4 2.8L11 4.4l-2.5 2.4.6 3.4L6 8.8 3 10.2l.6-3.4L1 4.4l3.6-.6z" stroke="currentColor" stroke-width="1"/></svg>
+          Goal tracking
+        </span>
+        <span class="feature-tag">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="4" r="2.2" stroke="currentColor" stroke-width="1"/><path d="M1.5 11c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+          Trainer messages
+        </span>
+        <span class="feature-tag">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="3" width="10" height="7" rx="1" stroke="currentColor" stroke-width="1"/><path d="M1 6h10" stroke="currentColor" stroke-width="1"/></svg>
+          Payment history
+        </span>
+        <span class="feature-tag">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1a4 4 0 0 1 4 4v2l.8 1.5H1.2L2 7V5a4 4 0 0 1 4-4Zm0 10a1.5 1.5 0 0 1-1.5-1.5h3A1.5 1.5 0 0 1 6 11Z" stroke="currentColor" stroke-width="1"/></svg>
+          Push alerts
+        </span>
+        <span class="feature-tag">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M3 6l2.5 2.5L9 3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Waitlist
+        </span>
+        <span class="feature-tag">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4.5" stroke="currentColor" stroke-width="1"/><path d="M6 3v3.2l1.8 1.4" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+          Renewal reminders
+        </span>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="ic-label">Booking interaction</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">
+        Tap any <span style="color:var(--color-text-primary);font-weight:500">Book</span> button on a class to simulate booking. The app shows live capacity, waitlists full classes, and marks your confirmed sessions as <span style="color:#085041;background:#E1F5EE;padding:1px 6px;border-radius:4px;font-size:11px;font-weight:600">Booked</span>.
+      </div>
+    </div>
+
+    <button onclick="sendPrompt('Now build the Trainer dashboard view for GymFlow — show trainer schedule, assigned members, workout plan builder and messaging.')" style="width:100%;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:500;padding:11px 16px;border-radius:10px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary);cursor:pointer;text-align:left">
+      Build the Trainer dashboard next ↗
+    </button>
+  </div>
+
+</div>
+
+<script>
+const pat=[
+  1,1,1,0,1,0,0,
+  1,0,1,1,0,1,0,
+  1,1,1,0,0,0,1,
+  0,1,0,1,0,1,1,
+  1,0,1,0,1,1,0,
+  0,1,1,1,0,0,1,
+  1,1,0,0,1,1,1
+];
+const g=document.getElementById('qr-grid');
+if(g){pat.forEach(v=>{const d=document.createElement('div');d.className=v?'qc':'qe';g.appendChild(d);});}
+
+['book1','book2'].forEach(id=>{
+  const b=document.getElementById(id);
+  if(b){
+    b.addEventListener('click',function(){
+      const row=this.closest('.cl-item');
+      const name=row.querySelector('.cl-name').textContent;
+      const sp=row.querySelector('.cl-spots');
+      this.textContent='Booked';
+      this.className='cl-book cl-booked';
+      const cur=parseInt(sp.textContent);
+      if(!isNaN(cur)){
+        const nxt=cur-1;
+        if(nxt<=0){sp.textContent='Full';sp.className='cl-spots spots-full';}
+        else if(nxt<=2){sp.textContent=nxt+' left';sp.className='cl-spots spots-low';}
+        else{sp.textContent=nxt+' left';sp.className='cl-spots spots-ok';}
+      }
+    });
+  }
+});
+
+document.querySelector('.hero-btn').addEventListener('click',()=>{
+  sendPrompt('Show me the membership renewal flow for the Pro plan at IronHaus Fitness.');
+});
+</script>
