@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⌘ GymFlow | Multi-Tenant Gym SaaS
 
-## Getting Started
+![GymFlow Banner](https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80&w=1000)
 
-First, run the development server:
+**GymFlow** is a premium, high-performance platform designed to scale fitness businesses. Built with a unified universal portal, it bridges the gap between Gym Owners, Trainers, and Members through a seamless glassmorphic interface and a robust multi-tenant backend.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Key Modules
+- **Owner Command Centre**: Full telemetry for revenue, membership growth, and staff management.
+- **Universal Smart Portal**: A single entry point that auto-detects user roles (Member vs. Trainer) via secure clearance codes.
+- **Mobile-First Member App**: Real-time attendance tracking, goal progress, and class scheduling.
+- **Trainer Duty HUD**: Digital roster management and one-tap member attendance logging.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Technology Stack
+- **Core Engine**: PHP 8.x + SQLite (Optimized for Shared Hosting)
+- **Frontend**: "Nebula OS" Design System (Glassmorphism, CSS Variables, Fluid Animations)
+- **Mobile Environment**: Capacitor (Native Android APK Wrapper)
+- **Legacy Components**: Next.js 15 (App Router) + Prisma ORM
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📲 Mobile Build Info
+The project is pre-configured with **Capacitor**. The Android native source is located in the `/android` directory.
+- **Min SDK**: 23 (Android 6.0)
+- **Target SDK**: 35 (Android 15)
+- **Java Requirements**: OpenJDK 17
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📂 Project Structure
+- `/php_app`: The self-contained production-ready SaaS for shared hosting.
+- `/src`: The Next.js prototype and development environment.
+- `/android`: Native Android project files.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+*Created by Antigravity AI for GymFlow SaaS Development.*
