@@ -99,17 +99,27 @@
                   `;
                   listEl.appendChild(item);
               });
+          }, (error) => {
+              console.error("Snapshot Error:", error);
+              document.getElementById('gymLabel').textContent = "ERROR: " + error.code;
+              document.getElementById('gymLabel').style.background = "rgba(255,0,0,0.2)";
+              document.getElementById('gymLabel').style.color = "#ff6b6b";
           });
 
         async function addMockMember() {
-            await db.collection('members').add({
-                gym_id: gymId,
-                name: "New Recruit",
-                plan: "Elite",
-                access_code: Math.floor(1000 + Math.random() * 9000).toString(),
-                attendance: 0,
-                joined_date: "Apr 2026"
-            });
+            try {
+                await db.collection('members').add({
+                    gym_id: gymId,
+                    name: "New Recruit",
+                    plan: "Elite",
+                    access_code: Math.floor(1000 + Math.random() * 9000).toString(),
+                    attendance: 0,
+                    joined_date: "Apr 2026"
+                });
+            } catch (error) {
+                console.error("Provision Error:", error);
+                alert("Cloud Connection Failed: " + error.message);
+            }
         }
     </script>
 </body>
